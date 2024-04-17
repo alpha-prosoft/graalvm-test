@@ -1,17 +1,20 @@
 #!/bin/bash
 
 rm -rf lambda_function
+rm -rf pom*
+rm -rf reports
 
 mkdir -p target
 
 clojure -T:build uber \
 	:main "nativetest.main" \
 	:group-id "com.alpha-prosoft.test" \
-	:artifact-id "nativetest-standalone" \
+	:artifact-id "nativetest" \
 	:version '"1.0"' \
+	:lms true \
 	:out 'target'
 	
-native-image -jar target/nativetest-standalone-1.0-standalone.jar \
+native-image -jar target/nativetest-1.0-standalone.jar \
         -o lambda_function \
         --no-fallback \
         --enable-https \
@@ -22,7 +25,6 @@ native-image -jar target/nativetest-standalone-1.0-standalone.jar \
         --enable-url-protocols=https \
         -H:+UnlockExperimentalVMOptions \
         -H:NumberOfThreads=16 \
-        -H:-RunReachabilityHandlersConcurrently \
         -H:TraceClassInitialization=true \
         -H:ReflectionConfigurationFiles=reflectconfig.json \
         -H:+ReportExceptionStackTraces \
