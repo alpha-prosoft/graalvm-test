@@ -7,3 +7,6 @@ target
 *.iml
 .nrepl-port
 classes
+reports
+lambda_function
+pom.properties

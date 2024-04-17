@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf lambda_function
+
 mkdir -p target
 
 clojure -T:build uber \
@@ -31,17 +33,16 @@ native-image -jar target/nativetest-standalone-1.0-standalone.jar \
         -H:IncludeResources='logback.xml' \
         -H:Log=registerResource \
         --report-unsupported-elements-at-runtime \
-        --initialize-at-build-time java.util.UUID \
         --initialize-at-build-time=sun.rmi.server,sun.rmi.runtime,sun.rmi.runtime,sun.rmi.server,sun.rmi.server \
         --trace-class-initialization=clojure.lang.Compiler \
         --trace-class-initialization=clojure.lang.RT \
         --trace-class-initialization=java.security.SecureRandom \
-        --trace-class-initialization=java.util.UUID$Holder \
+        --trace-class-initialization=java.util.UUID\$Holder \
         --trace-class-initialization=java.util.UUID \
         --trace-object-instantiation=java.util.UUID \
         --trace-object-instantiation=java.security.SecureRandom \
         --initialize-at-run-time=org.httpkit.client \
-        --initialize-at-run-time=java.util.UUID$Holder \
+        --initialize-at-run-time=java.util.UUID\$Holder \
         --initialize-at-run-time=org.postgresql.sspi.SSPIClient \
         --initialize-at-run-time=org.httpkit.client.SslContextFactory \
         --initialize-at-run-time=org.httpkit.client.HttpClient
