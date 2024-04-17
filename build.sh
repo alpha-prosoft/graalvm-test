@@ -13,8 +13,10 @@ clojure -T:build uber \
 	:version '"1.0"' \
 	:lms true \
 	:out 'target'
-	
-native-image -jar target/nativetest-1.0-standalone.jar \
+
+export INIT_PACKAGES="nativetest,java_http_clj,import,batch,aws,jdk,javax,sdk,clj_aws_sign,ring,jsonista,camel_snake_kebab,lambda,clojure,next,org,com,ch,java,iso_7064,borkdude,edd,malli,${EXT_INIT_PACKAGES:-java}"
+
+native-image -jar target/nativetest-1.0-standalone.jar \  
         -o lambda_function \
         --no-fallback \
         --enable-https \
@@ -35,7 +37,7 @@ native-image -jar target/nativetest-1.0-standalone.jar \
         -H:IncludeResources='logback.xml' \
         -H:Log=registerResource \
         --report-unsupported-elements-at-runtime \
-        --initialize-at-build-time=sun.rmi.server,sun.rmi.runtime,sun.rmi.runtime,sun.rmi.server,sun.rmi.server \
+        --initialize-at-build-time=${INIT_PACKAGES},sun.rmi.server,sun.rmi.runtime,sun.rmi.runtime,sun.rmi.server,sun.rmi.server \
         --trace-class-initialization=clojure.lang.Compiler \
         --trace-class-initialization=clojure.lang.RT \
         --trace-class-initialization=java.security.SecureRandom \
@@ -47,4 +49,5 @@ native-image -jar target/nativetest-1.0-standalone.jar \
         --initialize-at-run-time=java.util.UUID\$Holder \
         --initialize-at-run-time=org.postgresql.sspi.SSPIClient \
         --initialize-at-run-time=org.httpkit.client.SslContextFactory \
-        --initialize-at-run-time=org.httpkit.client.HttpClient
+        --initialize-at-run-time=org.httpkit.client.HttpClient \
+        
