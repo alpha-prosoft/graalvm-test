@@ -70,18 +70,6 @@
                     :src-dirs src-dirs
                     :class-dir class-dir})
 
-    (when lms
-      (let [logging-ns "logging"
-            logging-base  "src"
-            logging-file (format "%s/%s.clj" logging-base logging-ns)]
-        (println "Add LMS specific logging to be AOT compiled")
-        (io/make-parents logging-file)
-        (spit logging-file
-              "(ns logging (:require [lambda.logging :refer :all]))")
-        (b/compile-clj {:basis basis
-                        :src-dirs [logging-base]
-                        :class-dir class-dir})
-        (b/delete {:path logging-file})))
     (b/uber {:class-dir class-dir
              :uber-file uber-file
              :basis basis

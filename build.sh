@@ -11,19 +11,17 @@ clojure -T:build uber \
 	:group-id "com.alpha-prosoft.test" \
 	:artifact-id "nativetest" \
 	:version '"1.0"' \
-	:lms true \
 	:out 'target'
 
 export INIT_PACKAGES="nativetest,java_http_clj,import,batch,aws,jdk,javax,sdk,clj_aws_sign,ring,jsonista,camel_snake_kebab,lambda,clojure,next,org,com,ch,java,iso_7064,borkdude,edd,malli,${EXT_INIT_PACKAGES:-java}"
 
-native-image -jar target/nativetest-1.0-standalone.jar \  
+native-image -jar target/nativetest-1.0-standalone.jar \
         -o lambda_function \
         --no-fallback \
         --enable-https \
         --gc=G1 \
         -J-Xmx24g \
         -Dcom.zaxxer.hikari.useWeakReferences=false \
-        -Dclojure.tools.logging.factory=lambda.logging/slf4j-json-factory \
         --enable-url-protocols=https \
         -H:+UnlockExperimentalVMOptions \
         -H:NumberOfThreads=16 \
@@ -49,5 +47,5 @@ native-image -jar target/nativetest-1.0-standalone.jar \
         --initialize-at-run-time=java.util.UUID\$Holder \
         --initialize-at-run-time=org.postgresql.sspi.SSPIClient \
         --initialize-at-run-time=org.httpkit.client.SslContextFactory \
-        --initialize-at-run-time=org.httpkit.client.HttpClient \
+        --initialize-at-run-time=org.httpkit.client.HttpClient
         
